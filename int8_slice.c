@@ -57,7 +57,7 @@ uint8_slice_reverse(int8_slice_t *s) {
     uint64_t j = 0;
 
     while(i > j) {
-        int temp = s->items[i];
+        int8_t temp = s->items[i];
         s->items[i] = s->items[j];
         s->items[j] = temp;
         i--;
@@ -208,7 +208,7 @@ uint8_slice_sort(int8_slice_t *s, sort_compare_func_t sort_compare)
 		return ;
 	}
 
-	qsort(s->items, s->len, sizeof(int), sort_compare);
+	qsort(s->items, s->len, sizeof(int8_t), sort_compare);
 }
 
 uint64_t

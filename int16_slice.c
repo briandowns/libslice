@@ -208,7 +208,7 @@ uint16_slice_sort(int16_slice_t *s, sort_compare_func_t sort_compare)
 		return ;
 	}
 
-	qsort(s->items, s->len, sizeof(int), sort_compare);
+	qsort(s->items, s->len, sizeof(int16_t), sort_compare);
 }
 
 uint64_t

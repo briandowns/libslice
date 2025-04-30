@@ -6,13 +6,13 @@
 #include <string.h>
 #include <time.h>
 
-#include "uint64_slice.h"
+#include "string_slice.h"
 
-uint64_slice_t*
-uint64_slice_new(const uint64_t cap)
+string_slice_t*
+string_slice_new(const uint64_t cap)
 {
-    uint64_slice_t *s = calloc(1, sizeof(uint64_slice_t));
-    s->items = calloc(1, sizeof(uint64_t) * cap);
+    string_slice_t *s = calloc(1, sizeof(string_slice_t));
+    s->items = calloc(1, sizeof(char*) * cap);
     s->len = 0;
     s->cap = cap;
 
@@ -20,15 +20,15 @@ uint64_slice_new(const uint64_t cap)
 }
 
 void
-uint64_slice_free(uint64_slice_t *s) {
+string_slice_free(string_slice_t *s) {
 	if (s != NULL && s->items != NULL) {
         free(s->items);
         free(s);
 	} 
 }
 
-int
-uint64_slice_get(uint64_slice_t *s, uint64_t idx)
+char*
+string_slice_get(string_slice_t *s, uint64_t idx)
 {
     if (idx >= 0 && idx < s->len) {
         return s->items[idx];
@@ -38,17 +38,17 @@ uint64_slice_get(uint64_slice_t *s, uint64_t idx)
 }
 
 void
-uint64_slice_append(uint64_slice_t *s, const uint64_t val)
+string_slice_append(string_slice_t *s, const char *val)
 {
     if (s->len == s->cap) {
         s->cap *= 2;
-        s->items = realloc(s->items, sizeof(uint64_t) * s->cap);
+        s->items = realloc(s->items, sizeof(char*) * s->cap);
     }
-    s->items[s->len++] = val;
+	strcpy(s->items[s->len++], val);
 }
 
 void
-uint64_slice_reverse(uint64_slice_t *s) {
+string_slice_reverse(string_slice_t *s) {
 	if (s->len < 2) {
 		return;
 	}
@@ -57,7 +57,7 @@ uint64_slice_reverse(uint64_slice_t *s) {
     uint64_t j = 0;
 
     while(i > j) {
-        int temp = s->items[i];
+        char *temp = s->items[i];
         s->items[i] = s->items[j];
         s->items[j] = temp;
         i--;
@@ -66,7 +66,7 @@ uint64_slice_reverse(uint64_slice_t *s) {
 }
 
 bool
-uint64_slice_compare(const uint64_slice_t *s1, const uint64_slice_t *s2, compare_func_t compare, void *user_data)
+string_slice_compare(const string_slice_t *s1, const string_slice_t *s2, compare_func_t compare, void *user_data)
 {
 	if (s1->len != s2->len) {
 		return false;
@@ -82,7 +82,7 @@ uint64_slice_compare(const uint64_slice_t *s1, const uint64_slice_t *s2, compare
 }
 
 uint64_t
-uint64_slice_copy(const uint64_slice_t *s1, uint64_slice_t *s2, bool overwrite)
+string_slice_copy(const string_slice_t *s1, string_slice_t *s2, bool overwrite)
 {
 	if (s2->len == 0) {
 		return 0;
@@ -91,7 +91,7 @@ uint64_slice_copy(const uint64_slice_t *s1, uint64_slice_t *s2, bool overwrite)
 	if (overwrite) {
 		if (s1->len != s2->len) {
 			s2->cap = s1->cap;
-			s2->items = realloc(s2->items, sizeof(uint64_t) * s1->cap);
+			s2->items = realloc(s2->items, sizeof(char*) * s1->cap);
 		}
 	}
 
@@ -104,7 +104,7 @@ uint64_slice_copy(const uint64_slice_t *s1, uint64_slice_t *s2, bool overwrite)
 }
 
 bool
-uint64_slice_contains(const uint64_slice_t *s, uint64_t val)
+string_slice_contains(const string_slice_t *s, char *val)
 {
 	if (s->len == 0) {
 		return false;
@@ -120,7 +120,7 @@ uint64_slice_contains(const uint64_slice_t *s, uint64_t val)
 }
 
 int
-uint64_slice_delete(uint64_slice_t *s, const uint64_t idx)
+string_slice_delete(string_slice_t *s, const uint64_t idx)
 {
 	if (s->len == 0 || idx > s->len) {
 		return -1;
@@ -135,18 +135,18 @@ uint64_slice_delete(uint64_slice_t *s, const uint64_t idx)
 }
 
 int
-uint64_slice_replace_by_idx(uint64_slice_t *s, const uint64_t idx, const uint64_t val)
+string_slice_replace_by_idx(string_slice_t *s, const uint64_t idx, const char *val)
 {
 	if (s->len == 0 || idx > s->len) {
 		return -1;
 	}
-	s->items[idx] = val;
+	strcpy(s->items[idx], val);
 
 	return 0;
 }
 
 int
-uint64_slice_replace_by_val(uint64_slice_t *s, const uint64_t old_val, const uint64_t new_val, uint64_t times, compare_func_t compare)
+string_slice_replace_by_val(string_slice_t *s, const char *old_val, const char *new_val, uint64_t times, compare_func_t compare)
 {
 	if (s->len == 0) {
 		return -1;
@@ -154,7 +154,7 @@ uint64_slice_replace_by_val(uint64_slice_t *s, const uint64_t old_val, const uin
 
 	for (uint64_t i = 0; i < s->len && times != 0; i++) {
 		if (compare(s->items[i], old_val, NULL)) {
-			s->items[i] = new_val;
+			strcpy(s->items[i], new_val);
 			times--;
 		}
 	}
@@ -162,20 +162,20 @@ uint64_slice_replace_by_val(uint64_slice_t *s, const uint64_t old_val, const uin
 	return 0;
 }
 
-int
-uint64_slice_first(uint64_slice_t *s)
+char*
+string_slice_first(string_slice_t *s)
 {
-	return uint64_slice_get(s, 0);
+	return string_slice_get(s, 0);
+}
+
+char*
+string_slice_last(string_slice_t *s)
+{
+	return string_slice_get(s, s->len-1);
 }
 
 int
-uint64_slice_last(uint64_slice_t *s)
-{
-	return uint64_slice_get(s, s->len-1);
-}
-
-int
-uint64_slice_foreach(uint64_slice_t *s, foreach_func_t ift, void *user_data)
+string_slice_foreach(string_slice_t *s, foreach_func_t ift, void *user_data)
 {
 	if (s->len == 0) {
 		return 0;
@@ -198,7 +198,7 @@ qsort_compare(const void *x, const void *y) {
 }
 
 void
-uint64_slice_sort(uint64_slice_t *s, sort_compare_func_t sort_compare)
+string_slice_sort(string_slice_t *s, sort_compare_func_t sort_compare)
 {
 	if (s->len < 2) {
 		return;
@@ -208,21 +208,21 @@ uint64_slice_sort(uint64_slice_t *s, sort_compare_func_t sort_compare)
 		return ;
 	}
 
-	qsort(s->items, s->len, sizeof(int), sort_compare);
+	qsort(s->items, s->len, sizeof(char*), sort_compare);
 }
 
 uint64_t
-uint64_slice_repeat(uint64_slice_t *s, const uint64_t val, const uint64_t times)
+string_slice_repeat(string_slice_t *s, const char *val, const uint64_t times)
 {
 	for (uint64_t i = 0; i < times; i++) {
-		uint64_slice_append(s, val);
+		string_slice_append(s, val);
 	}
 
 	return s->len;
 }
 
 uint64_t
-uint64_slice_count(uint64_slice_t *s, const uint64_t val, compare_func_t compare)
+string_slice_count(string_slice_t *s, const char *val, compare_func_t compare)
 {
 	uint64_t count = 0;
 
@@ -240,27 +240,27 @@ uint64_slice_count(uint64_slice_t *s, const uint64_t val, compare_func_t compare
 }
 
 uint64_t
-uint64_slice_grow(uint64_slice_t *s, const uint64_t size)
+string_slice_grow(string_slice_t *s, const uint64_t size)
 {
 	if (size == 0) {
 		return s->cap;
 	}
 
 	s->cap += size;
-    s->items = realloc(s->items, sizeof(uint64_t) * s->cap);
+    s->items = realloc(s->items, sizeof(char*) * s->cap);
 
 	return s->cap;
 }
 
 uint64_t
-uint64_slice_concat(uint64_slice_t *s1, const uint64_slice_t *s2)
+string_slice_concat(string_slice_t *s1, const string_slice_t *s2)
 {
 	if (s2->len == 0) {
 		return s1->len;
 	}
 	
 	s1->cap += s2->len;
-	s1->items = realloc(s1->items, sizeof(uint64_t) * s2->len);
+	s1->items = realloc(s1->items, sizeof(char*) * s2->len);
 
 	for (uint64_t i = 0, j = s1->len; i < s2->len; i++, j++) {
 		s1->items[j] = s2->items[i];

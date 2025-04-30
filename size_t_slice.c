@@ -91,7 +91,7 @@ size_t_slice_copy(const size_t_slice_t *s1, size_t_slice_t *s2, bool overwrite)
 	if (overwrite) {
 		if (s1->len != s2->len) {
 			s2->cap = s1->cap;
-			s2->items = realloc(s2->items, sizeof(uint64_t) * s1->cap);
+			s2->items = realloc(s2->items, sizeof(size_t) * s1->cap);
 		}
 	}
 
@@ -208,7 +208,7 @@ size_t_slice_sort(size_t_slice_t *s, sort_compare_func_t sort_compare)
 		return ;
 	}
 
-	qsort(s->items, s->len, sizeof(int), sort_compare);
+	qsort(s->items, s->len, sizeof(size_t), sort_compare);
 }
 
 uint64_t
