@@ -8,6 +8,12 @@
 
 #include "int16_slice.h"
 
+struct int16_slice {
+    int16_t *items;
+    uint64_t len;
+    uint64_t cap;
+};
+
 int16_slice_t*
 uint16_slice_new(const uint64_t cap)
 {
@@ -35,6 +41,28 @@ uint16_slice_get(int16_slice_t *s, uint64_t idx)
     }
 
     return 0;
+}
+
+uint64_t
+int16_slice_len(int16_slice_t *s)
+{
+	if (s == NULL) {
+		return 0;
+	}
+
+	struct int16_slice *is = (struct int16_slice*)s;
+	return is->len;
+}
+
+uint64_t
+int16_slice_cap(int16_slice_t *s)
+{
+	if (s == NULL) {
+		return 0;
+	}
+
+	struct int16_slice *is = (struct int16_slice*)s;
+	return is->cap;	
 }
 
 void
