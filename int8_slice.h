@@ -39,13 +39,13 @@ int
 uint8_slice_get(int8_slice_t *s, uint64_t idx);
 
 /**
- * int_slice_len returns the length of the slice.
+ * int8_slice_len returns the length of the slice.
  */
 uint64_t
 int8_slice_len(int8_slice_t *s);
 
 /**
- * int_slice_cap returns the capacity of the slice.
+ * int8_slice_cap returns the capacity of the slice.
  */
 uint64_t
 int8_slice_cap(int8_slice_t *s);

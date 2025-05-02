@@ -39,16 +39,17 @@ int
 uint16_slice_get(int16_slice_t *s, uint64_t idx);
 
 /**
- * int_slice_len returns the length of the slice.
+ * int16_slice_len returns the length of the slice.
  */
 uint64_t
 int16_slice_len(int16_slice_t *s);
 
 /**
- * int_slice_cap returns the capacity of the slice.
+ * int16_slice_cap returns the capacity of the slice.
  */
 uint64_t
 int16_slice_cap(int16_slice_t *s);
+
 /**
  * uint16_slice_append attempts to append the data to the given array.
  */
