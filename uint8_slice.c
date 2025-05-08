@@ -8,6 +8,12 @@
 
 #include "uint8_slice.h"
 
+struct uint8_slice {
+    uint8_t *items;
+    uint64_t len;
+    uint64_t cap;
+};
+
 uint8_slice_t*
 uint8_slice_new(const uint64_t cap)
 {
@@ -35,6 +41,28 @@ uint8_slice_get(uint8_slice_t *s, uint64_t idx)
     }
 
     return 0;
+}
+
+uint64_t
+uint8_slice_len(uint8_slice_t *s)
+{
+	if (s == NULL) {
+		return 0;
+	}
+
+	struct uint8_slice *is = (struct uint8_slice*)s;
+	return is->len;
+}
+
+uint64_t
+uint8_slice_cap(uint8_slice_t *s)
+{
+	if (s == NULL) {
+		return 0;
+	}
+
+	struct uint8_slice *is = (struct uint8_slice*)s;
+	return is->cap;	
 }
 
 void

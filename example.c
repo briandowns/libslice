@@ -14,6 +14,7 @@ main(void)
     }
     printf("%ld\n", int_slice_len(s));
     printf("%ld\n", int_slice_cap(s));
+
     int_slice_free(s);
 
     return 0;

@@ -13,11 +13,11 @@ LIBDIR = /usr/local/lib
 
 ifeq ($(UNAME_S),Darwin)
 $(NAME).dylib: clean
-	$(CC) -dynamiclib -o $@ slice.c $(CFLAGS) $(LDFLAGS)
+	$(CC) -dynamiclib -o $@ *.c $(CFLAGS) $(LDFLAGS)
 endif
 ifeq ($(UNAME_S),Linux)
 $(NAME).so: clean
-	$(CC) -shared -o $@ slice.c $(CFLAGS) $(LDFLAGS)
+	$(CC) -shared -o $@ *.c $(CFLAGS) $(LDFLAGS)
 endif
 
 .PHONY: tests
@@ -60,4 +60,4 @@ clean:
 
 .PHONY: example
 example: clean
-	$(CC) $(CFLAGS) -o $@ slice.c example.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ example.c $(LDFLAGS)

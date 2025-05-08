@@ -8,6 +8,12 @@
 
 #include "size_t_slice.h"
 
+struct size_t_slice {
+    size_t *items;
+    uint64_t len;
+    uint64_t cap;
+};
+
 size_t_slice_t*
 size_t_slice_new(const uint64_t cap)
 {
@@ -35,6 +41,28 @@ size_t_slice_get(size_t_slice_t *s, uint64_t idx)
     }
 
     return 0;
+}
+
+uint64_t
+size_t_slice_len(size_t_slice_t *s)
+{
+	if (s == NULL) {
+		return 0;
+	}
+
+	struct size_t_slice *is = (struct size_t_slice*)s;
+	return is->len;
+}
+
+uint64_t
+isize_t_slice_cap(size_t_slice_t *s)
+{
+	if (s == NULL) {
+		return 0;
+	}
+
+	struct size_t_slice *is = (struct size_t_slice*)s;
+	return is->cap;	
 }
 
 void

@@ -15,7 +15,7 @@ struct int32_slice {
 };
 
 int32_slice_t*
-uint32_slice_new(const uint64_t cap)
+int32_slice_new(const uint64_t cap)
 {
     int32_slice_t *s = calloc(1, sizeof(int32_slice_t));
     s->items = calloc(1, sizeof(int32_t) * cap);
@@ -26,7 +26,7 @@ uint32_slice_new(const uint64_t cap)
 }
 
 void
-uint32_slice_free(int32_slice_t *s) {
+int32_slice_free(int32_slice_t *s) {
 	if (s != NULL && s->items != NULL) {
         free(s->items);
         free(s);
@@ -34,7 +34,7 @@ uint32_slice_free(int32_slice_t *s) {
 }
 
 int
-uint32_slice_get(int32_slice_t *s, uint64_t idx)
+int32_slice_get(int32_slice_t *s, uint64_t idx)
 {
     if (idx >= 0 && idx < s->len) {
         return s->items[idx];
@@ -66,7 +66,7 @@ int32_slice_cap(int32_slice_t *s)
 }
 
 void
-uint32_slice_append(int32_slice_t *s, const int32_t val)
+int32_slice_append(int32_slice_t *s, const int32_t val)
 {
     if (s->len == s->cap) {
         s->cap *= 2;
@@ -76,7 +76,7 @@ uint32_slice_append(int32_slice_t *s, const int32_t val)
 }
 
 void
-uint32_slice_reverse(int32_slice_t *s) {
+int32_slice_reverse(int32_slice_t *s) {
 	if (s->len < 2) {
 		return;
 	}
@@ -94,7 +94,7 @@ uint32_slice_reverse(int32_slice_t *s) {
 }
 
 bool
-uint32_slice_compare(const int32_slice_t *s1, const int32_slice_t *s2, compare_func_t compare, void *user_data)
+int32_slice_compare(const int32_slice_t *s1, const int32_slice_t *s2, compare_func_t compare, void *user_data)
 {
 	if (s1->len != s2->len) {
 		return false;
@@ -110,7 +110,7 @@ uint32_slice_compare(const int32_slice_t *s1, const int32_slice_t *s2, compare_f
 }
 
 uint64_t
-uint32_slice_copy(const int32_slice_t *s1, int32_slice_t *s2, bool overwrite)
+int32_slice_copy(const int32_slice_t *s1, int32_slice_t *s2, bool overwrite)
 {
 	if (s2->len == 0) {
 		return 0;
@@ -132,7 +132,7 @@ uint32_slice_copy(const int32_slice_t *s1, int32_slice_t *s2, bool overwrite)
 }
 
 bool
-uint32_slice_contains(const int32_slice_t *s, int32_t val)
+int32_slice_contains(const int32_slice_t *s, int32_t val)
 {
 	if (s->len == 0) {
 		return false;
@@ -148,7 +148,7 @@ uint32_slice_contains(const int32_slice_t *s, int32_t val)
 }
 
 int
-uint32_slice_delete(int32_slice_t *s, const uint64_t idx)
+int32_slice_delete(int32_slice_t *s, const uint64_t idx)
 {
 	if (s->len == 0 || idx > s->len) {
 		return -1;
@@ -163,7 +163,7 @@ uint32_slice_delete(int32_slice_t *s, const uint64_t idx)
 }
 
 int
-uint32_slice_replace_by_idx(int32_slice_t *s, const uint64_t idx, const int32_t val)
+int32_slice_replace_by_idx(int32_slice_t *s, const uint64_t idx, const int32_t val)
 {
 	if (s->len == 0 || idx > s->len) {
 		return -1;
@@ -174,7 +174,7 @@ uint32_slice_replace_by_idx(int32_slice_t *s, const uint64_t idx, const int32_t 
 }
 
 int
-uint32_slice_replace_by_val(int32_slice_t *s, const int32_t old_val, const int32_t new_val, uint64_t times, compare_func_t compare)
+int32_slice_replace_by_val(int32_slice_t *s, const int32_t old_val, const int32_t new_val, uint64_t times, compare_func_t compare)
 {
 	if (s->len == 0) {
 		return -1;
@@ -191,19 +191,19 @@ uint32_slice_replace_by_val(int32_slice_t *s, const int32_t old_val, const int32
 }
 
 int
-uint32_slice_first(int32_slice_t *s)
+int32_slice_first(int32_slice_t *s)
 {
-	return uint32_slice_get(s, 0);
+	return int32_slice_get(s, 0);
 }
 
 int
-uint32_slice_last(int32_slice_t *s)
+int32_slice_last(int32_slice_t *s)
 {
-	return uint32_slice_get(s, s->len-1);
+	return int32_slice_get(s, s->len-1);
 }
 
 int
-uint32_slice_foreach(int32_slice_t *s, foreach_func_t ift, void *user_data)
+int32_slice_foreach(int32_slice_t *s, foreach_func_t ift, void *user_data)
 {
 	if (s->len == 0) {
 		return 0;
@@ -226,7 +226,7 @@ qsort_compare(const void *x, const void *y) {
 }
 
 void
-uint32_slice_sort(int32_slice_t *s, sort_compare_func_t sort_compare)
+int32_slice_sort(int32_slice_t *s, sort_compare_func_t sort_compare)
 {
 	if (s->len < 2) {
 		return;
@@ -240,17 +240,17 @@ uint32_slice_sort(int32_slice_t *s, sort_compare_func_t sort_compare)
 }
 
 uint64_t
-uint32_slice_repeat(int32_slice_t *s, const int32_t val, const uint64_t times)
+int32_slice_repeat(int32_slice_t *s, const int32_t val, const uint64_t times)
 {
 	for (uint64_t i = 0; i < times; i++) {
-		uint32_slice_append(s, val);
+		int32_slice_append(s, val);
 	}
 
 	return s->len;
 }
 
 uint64_t
-uint32_slice_count(int32_slice_t *s, const int32_t val, compare_func_t compare)
+int32_slice_count(int32_slice_t *s, const int32_t val, compare_func_t compare)
 {
 	uint64_t count = 0;
 
@@ -268,7 +268,7 @@ uint32_slice_count(int32_slice_t *s, const int32_t val, compare_func_t compare)
 }
 
 uint64_t
-uint32_slice_grow(int32_slice_t *s, const uint64_t size)
+int32_slice_grow(int32_slice_t *s, const uint64_t size)
 {
 	if (size == 0) {
 		return s->cap;
@@ -281,7 +281,7 @@ uint32_slice_grow(int32_slice_t *s, const uint64_t size)
 }
 
 uint64_t
-uint32_slice_concat(int32_slice_t *s1, const int32_slice_t *s2)
+int32_slice_concat(int32_slice_t *s1, const int32_slice_t *s2)
 {
 	if (s2->len == 0) {
 		return s1->len;

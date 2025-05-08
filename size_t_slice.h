@@ -15,11 +15,7 @@ typedef void (*foreach_func_t)(const size_t item, void *user_data);
 typedef int  (*sort_compare_func_t)(const void *x, const void *y);
 typedef bool (*val_equal_func_t)(const size_t x, const size_t y, void *user_data);
 
-typedef struct {
-    size_t *items;
-    uint64_t len;
-    uint64_t cap;
-} size_t_slice_t;
+typedef struct size_t_slice size_t_slice_t;
 
 /**
  * size_t_slice_new creates a pointer of type size_t_slice_t, sets
@@ -41,6 +37,18 @@ size_t_slice_free(size_t_slice_t *s);
  */
 int
 size_t_slice_get(size_t_slice_t *s, uint64_t idx);
+
+/**
+ * size_t_slice_len returns the length of the slice.
+ */
+uint64_t
+size_t_slice_len(size_t_slice_t *s);
+
+/**
+ * size_t_slice_cap returns the capacity of the slice.
+ */
+uint64_t
+size_t_slice_cap(size_t_slice_t *s);
 
 /**
  * size_t_slice_append attempts to append the data to the given array.
