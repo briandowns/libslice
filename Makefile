@@ -51,13 +51,21 @@ ifeq ($(UNAME_S),Darwin)
 	rm -f $(INCDIR)/$(NAME).dylib
 endif
 
+.PHONY: example
+example: clean
+	$(CC) $(CFLAGS) -o $@ example.c $(LDFLAGS)
+
+.PHONY: test
+test: clean
+	$(CC) -o tests/tests tests/*.c tests/crosscheck.c \
+		int_slice.c int8_slice.c int16_slice.c int32_slice.c int64_slice.c \
+		uint_slice.c uint8_slice.c uint16_slice.c uint32_slice.c uint64_slice.c \
+		size_t_slice.c string_slice.c
+	tests/tests
+
 .PHONY: clean
 clean:
 	rm -f $(NAME).dylib
 	rm -f $(NAME).so
 	rm -f example
 	rm -f tests/tests
-
-.PHONY: example
-example: clean
-	$(CC) $(CFLAGS) -o $@ example.c $(LDFLAGS)

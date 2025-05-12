@@ -13,7 +13,7 @@ extern "C" {
 typedef bool (*compare_func_t)(const int x, const int y, void *user_data);
 typedef void (*foreach_func_t)(const int item, void *user_data);
 typedef int  (*sort_compare_func_t)(const void *x, const void *y);
-typedef bool (*val_equal_func_t)(const int x, const int y, void *user_data);
+typedef bool (*val_equal_func_int_t)(const int x, const int y, void *user_data);
 
 typedef struct int_slice int_slice_t;
 
